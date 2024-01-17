@@ -1,0 +1,197 @@
+//create a blade file in layouts like paginate.blade.php
+@if ($paginator->lastPage() > 1)
+
+    <div class="product-pagination">
+
+        <ul>
+
+            <li class="{{ $paginator->currentPage() == 1 ? ' disabled' : '' }}">
+
+                <a href="{{ $paginator->url(1) }}">Previous</a>
+
+            </li>
+
+            @for ($i = 1; $i <= $paginator->lastPage(); $i++)
+
+                <li class="{{ $paginator->currentPage() == $i ? ' active' : '' }}">
+
+                    <a href="{{ $paginator->url($i) }}">{{ $i }}</a>
+
+                </li>
+
+            @endfor
+
+            <li class="{{ $paginator->currentPage() == $paginator->lastPage() ? ' disabled' : '' }}">
+
+                <a href="{{ $paginator->url($paginator->currentPage() + 1) }}">Next</a>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+@endif
+
+
+
+
+//use in your blade file
+@extends('layouts.backend')
+
+@section('content')
+
+<div class="header bg-primary pb-6">
+
+   <div class="container-fluid">
+
+      <div class="header-body">
+
+         <div class="row align-items-center py-4">
+
+            <div class="col-lg-6 col-7">
+
+               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+
+                  <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+
+                     <li class="breadcrumb-item"><a href="{{ route('bookingFormListing') }}"><i class="fas fa-home"></i></a></li>
+
+                     <li class="breadcrumb-item"><a href="{{ route('bookingFormListing') }}">Bookings</a></li>
+
+                  </ol>
+
+               </nav>
+
+            </div>
+
+         </div>
+
+      </div>
+
+   </div>
+
+</div>
+
+<!-- Page content -->
+
+<div class="container-fluid mt--6">
+
+<div class="row">
+
+   <div class="col">
+
+      <div class="card">
+
+         <!-- Card header -->
+
+         <div class="card-header border-0">
+
+            <h3 class="mb-0">Bookings</h3>
+
+         </div>
+
+         <!-- Light table -->
+
+         @if(count($bookings))
+
+         <div class="table-responsive">
+
+            <table class="table align-items-center table-flush">
+
+               <thead class="thead-light">
+
+                  <tr>
+
+                     <th scope="col" class="sort" data-sort="name">S.No.</th>
+
+                     <th scope="col" class="sort" data-sort="budget">First Name</th>
+
+                     <th scope="col" class="sort" data-sort="budget">Last Name</th>
+
+                     <th scope="col" class="sort" data-sort="budget">Email</th>
+
+                     <th scope="col" class="sort" data-sort="budget">Booking Date To</th>
+
+                     <th scope="col" class="sort" data-sort="budget">Booking Date From</th>
+
+                     <th scope="col" class="sort" data-sort="budget">Mobile No.</th>
+
+                       <th scope="col" class="sort" data-sort="budget">Destination</th>
+
+                     <th scope="col" class="sort" data-sort="budget">Adults</th>
+
+                     <th scope="col" class="sort" data-sort="budget">Children</th>
+
+                  </tr>
+
+               </thead>
+
+               <tbody class="list">
+
+                  @foreach($bookings as $booking)
+
+                  <tr>
+
+                     <td>{{ $loop->iteration }}</td>
+
+                     <td class="budget">{{ $booking->first_name }}</td>
+
+                     <td class="budget">{{ $booking->last_name }}</td>
+
+                     <td class="budget">{{ $booking->email }}</td>
+
+                     <td class="budget">{{ date('Y d M', strtotime($booking->departureDate)) }}</td>
+
+                     <td class="budget">{{ date('Y d M', strtotime($booking->ArrivalDate)) }}</td>
+
+                     <td class="budget">{{ $booking->mobile_number }}</td>
+                        <td class="budget">{{ $booking->destination }}</td>
+
+                     <td class="budget">{{ $booking->adults }}</td>
+
+                     <td class="budget">{{ $booking->children }}</td>
+
+                  </tr>
+
+                  @endforeach
+
+               </tbody>
+
+            </table>
+
+         </div>
+
+         @else
+
+            <p class="container">No Bookings Yet!</p>
+
+         @endif
+
+         <!-- Card footer -->
+
+         <!-- pagination -->
+
+         <div class="row">
+
+            <div class="col-12">
+
+               <div class="product-pagination">
+
+                  @include('layouts.paginator', ['paginator'=> $bookings])
+
+               </div>
+
+            </div>
+
+         </div>
+
+         <!-- pagination -->
+
+      </div>
+
+   </div>
+
+</div>
+
+@endsection
